@@ -64,10 +64,7 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res) => {
-  if (req.isAuthenticated()) {
-    return res.redirect('/tasks');
-  }
-  return res.redirect('/login');
+  res.render('landing');
 });
 
 app.use('/', userRoutes);
