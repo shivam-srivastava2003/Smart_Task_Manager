@@ -1,0 +1,59 @@
+<% layout('layouts/boilerplate') %>
+<section class="dashboard-header">
+  <h1>Task Dashboard</h1>
+  <a href="/tasks/new" class="btn">+ Add Task</a>
+</section>
+
+<section class="stats-grid">
+  <article class="stat-card"><h3>Total</h3><p><%= stats.totalTasks %></p></article>
+  <article class="stat-card"><h3>Completed</h3><p><%= stats.completedTasks %></p></article>
+  <article class="stat-card"><h3>Pending</h3><p><%= stats.pendingTasks %></p></article>
+</section>
+
+<section class="filter-bar">
+  <form action="/tasks" method="GET" class="filter-form">
+    <select name="status">
+      <option value="">All Statuses</option>
+      <option value="Pending" <%= filters.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+      <option value="Completed" <%= filters.status === 'Completed' ? 'selected' : '' %>>Completed</option>
+    </select>
+    <select name="priority">
+      <option value="">All Priorities</option>
+      <option value="Low" <%= filters.priority === 'Low' ? 'selected' : '' %>>Low</option>
+      <option value="Medium" <%= filters.priority === 'Medium' ? 'selected' : '' %>>Medium</option>
+      <option value="High" <%= filters.priority === 'High' ? 'selected' : '' %>>High</option>
+    </select>
+    <button class="btn btn-small" type="submit">Apply Filters</button>
+    <a href="/tasks" class="btn btn-ghost btn-small">Reset</a>
+  </form>
+</section>
+
+<section class="task-grid">
+  <% if (!tasks.length) { %>
+    <p class="empty-state">No tasks found. Create your first task!</p>
+  <% } %>
+
+  <% tasks.forEach((task) => { %>
+    <% const isOverdue = task.deadline && task.status === 'Pending' && new Date(task.deadline) < new Date(); %>
+    <article class="task-card <%= isOverdue ? 'overdue' : '' %>">
+      <div class="task-top">
+        <h3><%= task.title %></h3>
+        <span class="badge <%= task.priority.toLowerCase() %>"><%= task.priority %></span>
+      </div>
+      <p><%= task.description || 'No description provided.' %></p>
+      <div class="task-meta">
+        <span>Status: <strong><%= task.status %></strong></span>
+        <span>Deadline: <strong><%= task.deadline ? new Date(task.deadline).toLocaleDateString() : 'N/A' %></strong></span>
+      </div>
+      <div class="task-actions">
+        <form action="/tasks/<%= task._id %>/toggle?_method=PATCH" method="POST">
+          <button class="btn btn-small" type="submit"><%= task.status === 'Pending' ? 'Mark Completed' : 'Mark Pending' %></button>
+        </form>
+        <a class="btn btn-ghost btn-small" href="/tasks/<%= task._id %>/edit">Edit</a>
+        <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST">
+          <button class="btn btn-danger btn-small" type="submit">Delete</button>
+        </form>
+      </div>
+    </article>
+  <% }) %>
+</section>
