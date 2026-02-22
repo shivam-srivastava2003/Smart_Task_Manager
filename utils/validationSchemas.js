@@ -23,8 +23,28 @@ const loginSchema = Joi.object({
   password: Joi.string().required()
 });
 
+const verifyOtpSchema = Joi.object({
+  otp: Joi.string().pattern(/^\d{6}$/).required().messages({
+    'string.pattern.base': 'OTP must be a 6-digit number.'
+  })
+});
+
+const forgotPasswordSchema = Joi.object({
+  email: Joi.string().email().required()
+});
+
+const resetPasswordSchema = Joi.object({
+  password: Joi.string().min(6).required(),
+  confirmPassword: Joi.string().valid(Joi.ref('password')).required().messages({
+    'any.only': 'Passwords do not match.'
+  })
+});
+
 module.exports = {
   taskSchema,
   signupSchema,
-  loginSchema
+  loginSchema,
+  verifyOtpSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema
 };

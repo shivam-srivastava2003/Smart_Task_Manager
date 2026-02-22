@@ -1,6 +1,24 @@
 const Task = require('../models/task');
 const ExpressError = require('../utils/ExpressError');
-const { taskSchema, signupSchema, loginSchema } = require('../utils/validationSchemas');
+const {
+  taskSchema,
+  signupSchema,
+  loginSchema,
+  verifyOtpSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema
+} = require('../utils/validationSchemas');
+
+const validateWithFlash = (schema, req, res, redirectTo) => {
+  const { error } = schema.validate(req.body, { abortEarly: false });
+  if (error) {
+    const errorMessages = error.details.map((el) => el.message);
+    req.flash('validationErrors', errorMessages);
+    res.redirect(redirectTo);
+    return false;
+  }
+  return true;
+};
 
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
@@ -19,32 +37,32 @@ module.exports.storeReturnTo = (req, res, next) => {
 };
 
 module.exports.validateTask = (req, res, next) => {
-  const { error } = taskSchema.validate(req.body, { abortEarly: false });
-  if (error) {
-    const errorMessages = error.details.map((el) => el.message);
-    req.flash('validationErrors', errorMessages);
-    return res.redirect(req.originalUrl.includes('/edit') ? req.originalUrl : '/tasks/new');
-  }
+  if (!validateWithFlash(taskSchema, req, res, req.originalUrl.includes('/edit') ? req.originalUrl : '/tasks/new')) return;
   return next();
 };
 
 module.exports.validateSignup = (req, res, next) => {
-  const { error } = signupSchema.validate(req.body, { abortEarly: false });
-  if (error) {
-    const errorMessages = error.details.map((el) => el.message);
-    req.flash('validationErrors', errorMessages);
-    return res.redirect('/signup');
-  }
+  if (!validateWithFlash(signupSchema, req, res, '/signup')) return;
   return next();
 };
 
 module.exports.validateLogin = (req, res, next) => {
-  const { error } = loginSchema.validate(req.body, { abortEarly: false });
-  if (error) {
-    const errorMessages = error.details.map((el) => el.message);
-    req.flash('validationErrors', errorMessages);
-    return res.redirect('/login');
-  }
+  if (!validateWithFlash(loginSchema, req, res, '/login')) return;
+  return next();
+};
+
+module.exports.validateOtp = (req, res, next) => {
+  if (!validateWithFlash(verifyOtpSchema, req, res, '/verify-otp')) return;
+  return next();
+};
+
+module.exports.validateForgotPassword = (req, res, next) => {
+  if (!validateWithFlash(forgotPasswordSchema, req, res, '/forgot-password')) return;
+  return next();
+};
+
+module.exports.validateResetPassword = (req, res, next) => {
+  if (!validateWithFlash(resetPasswordSchema, req, res, req.originalUrl)) return;
   return next();
 };
 

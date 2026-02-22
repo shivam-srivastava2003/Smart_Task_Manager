@@ -8,7 +8,15 @@ const userSchema = new mongoose.Schema({
     unique: true,
     trim: true,
     lowercase: true
-  }
+  },
+  isVerified: {
+    type: Boolean,
+    default: false
+  },
+  otpHash: String,
+  otpExpiresAt: Date,
+  resetPasswordToken: String,
+  resetPasswordExpires: Date
 });
 
 userSchema.plugin(passportLocalMongoose);

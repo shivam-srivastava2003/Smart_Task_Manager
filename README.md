@@ -88,8 +88,10 @@ Smart_Task_Manager/
 ## Features
 
 - User Signup/Login/Logout with Passport and hashed passwords
+- Email OTP verification during signup and login access blocked until verification
 - Session-based authentication
 - Flash messages for success/error/validation feedback
+- Forgot password flow with secure reset token and expiry
 - Task CRUD operations (create, edit, delete, mark complete/pending)
 - Task ownership protection
 - Joi server-side validation

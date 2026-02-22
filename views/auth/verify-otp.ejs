@@ -1,0 +1,15 @@
+<% layout('layouts/boilerplate') %>
+<section class="auth-container">
+  <h1>Verify Email OTP</h1>
+  <p class="muted">Enter the 6-digit OTP sent to your email. OTP expires in 10 minutes.</p>
+
+  <form action="/verify-otp" method="POST" class="form-card">
+    <label for="otp">OTP</label>
+    <input id="otp" type="text" name="otp" maxlength="6" pattern="\d{6}" required />
+    <button class="btn" type="submit">Verify OTP</button>
+  </form>
+
+  <form action="/verify-otp/resend" method="POST" class="inline-form">
+    <button class="btn btn-ghost" type="submit">Resend OTP</button>
+  </form>
+</section>
