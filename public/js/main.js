@@ -62,3 +62,18 @@ if (profileBtn && profileMenu) {
     }
   });
 }
+
+
+const setupPageTransitions = () => {
+  const links = document.querySelectorAll("a[href^='/']");
+  links.forEach((link) => {
+    link.addEventListener('click', (e) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const href = link.getAttribute('href');
+      if (!href || href.startsWith('/#')) return;
+      document.body.classList.remove('page-ready');
+    });
+  });
+};
+
+setupPageTransitions();

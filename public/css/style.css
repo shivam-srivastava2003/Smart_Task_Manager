@@ -303,3 +303,94 @@ html[data-theme='dark'] .profile-logout:hover { background: #1f2937; }
 html[data-theme='dark'] .hero-tag { background: #1d4ed8; color: #dbeafe; }
 html[data-theme='dark'] .landing-hero { background: linear-gradient(160deg, #0b1220 0%, #111827 70%); }
 html[data-theme='dark'] .btn-ghost { background: #1f2937; color: #e5e7eb; }
+
+
+/* UI polish + performant animations */
+:root {
+  --ease-smooth: cubic-bezier(.22,.61,.36,1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.page-ready .main-content,
+.page-ready .landing-hero,
+.page-ready .auth-container,
+.page-ready .form-wrapper,
+.page-ready .error-page {
+  animation: fadeSlideIn 420ms var(--ease-smooth) both;
+}
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.btn,
+.menu-item,
+.profile-btn,
+.theme-toggle,
+.task-card,
+.stat-card,
+.feature-card,
+.filter-panel {
+  will-change: transform;
+}
+
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255,255,255,.15), rgba(255,255,255,0));
+  opacity: 0;
+  transition: opacity 220ms var(--ease-smooth);
+}
+
+.btn:hover::after { opacity: 1; }
+.btn:active { transform: translateY(0); }
+
+.stat-card,
+.task-card,
+.feature-card,
+.filter-panel {
+  transition: transform 220ms var(--ease-smooth), box-shadow 220ms var(--ease-smooth), border-color 220ms var(--ease-smooth);
+}
+
+.stat-card:hover,
+.task-card:hover,
+.feature-card:hover,
+.filter-panel:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px rgba(15, 23, 42, .09);
+}
+
+.profile-menu {
+  transform-origin: top right;
+  transition: opacity 160ms ease, transform 160ms ease;
+  opacity: 0;
+  transform: translateY(-6px) scale(.98);
+  pointer-events: none;
+}
+.profile-menu.open {
+  display: block;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.menu-item,
+.profile-menu a,
+.profile-logout,
+.sidebar-logout {
+  transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
