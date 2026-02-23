@@ -1,0 +1,10 @@
+<% layout('layouts/boilerplate') %>
+<section class="form-wrapper profile-page">
+  <h1>My Profile</h1>
+  <article class="profile-card">
+    <div class="profile-line"><span>Username</span><strong><%= user.username %></strong></div>
+    <div class="profile-line"><span>Email</span><strong><%= user.email %></strong></div>
+    <div class="profile-line"><span>Verified</span><strong><%= user.isVerified ? 'Yes' : 'No' %></strong></div>
+  </article>
+  <a href="/dashboard/profile/edit" class="btn">Edit Profile</a>
+</section>

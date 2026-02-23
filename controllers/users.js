@@ -189,6 +189,34 @@ module.exports.resetPassword = async (req, res) => {
   return res.redirect('/login');
 };
 
+
+module.exports.renderProfile = async (req, res) => {
+  const user = await User.findById(req.user._id);
+  res.render('auth/profile', { user });
+};
+
+module.exports.renderEditProfile = async (req, res) => {
+  const user = await User.findById(req.user._id);
+  res.render('auth/edit-profile', { user });
+};
+
+module.exports.updateProfile = async (req, res) => {
+  const { username, email } = req.body;
+  const existingUser = await User.findOne({
+    _id: { $ne: req.user._id },
+    $or: [{ username }, { email }]
+  });
+
+  if (existingUser) {
+    req.flash('error', 'Username or email is already in use by another account.');
+    return res.redirect('/dashboard/profile/edit');
+  }
+
+  await User.findByIdAndUpdate(req.user._id, { username, email });
+  req.flash('success', 'Profile updated successfully.');
+  return res.redirect('/dashboard/profile');
+};
+
 module.exports.logout = (req, res, next) => {
   req.logout((err) => {
     if (err) return next(err);

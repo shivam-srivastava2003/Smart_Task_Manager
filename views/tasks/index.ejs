@@ -1,104 +1,113 @@
 <% layout('layouts/boilerplate') %>
 
-<section class="dashboard-header modern-header saas-header">
-  <div>
-    <p class="section-kicker">SaaS Overview</p>
-    <h1>Smart Task Intelligence Hub</h1>
-    <p class="section-sub">Manage workflow, monitor productivity, and track progress with real-time analytics.</p>
-  </div>
-  <a href="/dashboard/new" class="btn">+ Create Task</a>
-</section>
-
-<section class="stats-grid modern-stats saas-stats">
-  <article class="stat-card">
-    <p>Total Tasks</p>
-    <h3><%= stats.totalTasks %></h3>
-    <small>All time workload</small>
-  </article>
-  <article class="stat-card">
-    <p>Completed</p>
-    <h3><%= stats.completedTasks %></h3>
-    <small><%= analytics.completionRate %>% completion rate</small>
-  </article>
-  <article class="stat-card">
-    <p>Pending</p>
-    <h3><%= stats.pendingTasks %></h3>
-    <small>Requires action</small>
-  </article>
-  <article class="stat-card warning-card">
-    <p>Overdue</p>
-    <h3><%= analytics.overdueTasks %></h3>
-    <small>Critical follow-up</small>
-  </article>
-</section>
-
-<section class="analytics-grid">
-  <article class="chart-card">
-    <div class="chart-head">
-      <h3>Priority Distribution</h3>
-      <span>By task priority</span>
+<section class="dashboard-structure">
+  <article class="dashboard-panel summary-panel">
+    <div class="panel-head">
+      <div>
+        <p class="section-kicker">SaaS Overview</p>
+        <h1>Smart Task Intelligence Hub</h1>
+        <p class="section-sub">Structured overview of productivity, priorities, and delivery timeline.</p>
+      </div>
+      <a href="/dashboard/new" class="btn">+ Create Task</a>
     </div>
-    <canvas id="priorityChart" height="180"></canvas>
-  </article>
 
-  <article class="chart-card">
-    <div class="chart-head">
-      <h3>7-Day Task Trend</h3>
-      <span>Tasks created per day</span>
+    <div class="stats-grid modern-stats saas-stats">
+      <article class="stat-card"><p>Total Tasks</p><h3><%= stats.totalTasks %></h3><small>All time workload</small></article>
+      <article class="stat-card"><p>Completed</p><h3><%= stats.completedTasks %></h3><small><%= analytics.completionRate %>% completion rate</small></article>
+      <article class="stat-card"><p>Pending</p><h3><%= stats.pendingTasks %></h3><small>Requires action</small></article>
+      <article class="stat-card warning-card"><p>Overdue</p><h3><%= analytics.overdueTasks %></h3><small>Critical follow-up</small></article>
     </div>
-    <canvas id="trendChart" height="180"></canvas>
   </article>
-</section>
 
-<section class="filter-panel">
-  <form action="/dashboard" method="GET" class="filter-form">
-    <select name="status">
-      <option value="">All Statuses</option>
-      <option value="Pending" <%= filters.status === 'Pending' ? 'selected' : '' %>>Pending</option>
-      <option value="Completed" <%= filters.status === 'Completed' ? 'selected' : '' %>>Completed</option>
-    </select>
-    <select name="priority">
-      <option value="">All Priorities</option>
-      <option value="Low" <%= filters.priority === 'Low' ? 'selected' : '' %>>Low</option>
-      <option value="Medium" <%= filters.priority === 'Medium' ? 'selected' : '' %>>Medium</option>
-      <option value="High" <%= filters.priority === 'High' ? 'selected' : '' %>>High</option>
-    </select>
-    <button class="btn btn-small" type="submit">Apply</button>
-    <a href="/dashboard" class="btn btn-ghost btn-small">Reset</a>
-  </form>
-</section>
+  <article class="dashboard-panel analytics-panel">
+    <section class="analytics-grid">
+      <article class="chart-card">
+        <div class="chart-head">
+          <h3>Priority Distribution</h3>
+          <span>By task priority</span>
+        </div>
+        <canvas id="priorityChart" height="180"></canvas>
+      </article>
 
-<section class="task-grid modern-task-grid">
-  <% if (!tasks.length) { %>
-    <p class="empty-state">No tasks found. Create your first task to start analytics.</p>
-  <% } %>
+      <article class="chart-card">
+        <div class="chart-head">
+          <h3>7-Day Task Trend</h3>
+          <span>Tasks created per day</span>
+        </div>
+        <canvas id="trendChart" height="180"></canvas>
+      </article>
+    </section>
+  </article>
 
-  <% tasks.forEach((task) => { %>
-    <% const isOverdue = task.deadline && task.status === 'Pending' && new Date(task.deadline) < new Date(); %>
-    <article class="task-card modern-task-card <%= isOverdue ? 'overdue' : '' %>">
-      <div class="task-top">
-        <h3><%= task.title %></h3>
-        <span class="badge <%= task.priority.toLowerCase() %>"><%= task.priority %></span>
+  <article class="dashboard-panel filter-panel redesigned-filter">
+    <div class="filter-head">
+      <h3>Task Filters</h3>
+      <p>Refine your task list quickly</p>
+    </div>
+    <form action="/dashboard" method="GET" class="filter-form redesign-filter-form">
+      <div class="field-wrap">
+        <label>Status</label>
+        <select name="status">
+          <option value="">All Statuses</option>
+          <option value="Pending" <%= filters.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+          <option value="Completed" <%= filters.status === 'Completed' ? 'selected' : '' %>>Completed</option>
+        </select>
       </div>
-
-      <p class="task-desc"><%= task.description || 'No description provided.' %></p>
-
-      <div class="task-meta-row">
-        <span class="pill">Status: <strong><%= task.status %></strong></span>
-        <span class="pill">Due: <strong><%= task.deadline ? new Date(task.deadline).toLocaleDateString() : 'N/A' %></strong></span>
+      <div class="field-wrap">
+        <label>Priority</label>
+        <select name="priority">
+          <option value="">All Priorities</option>
+          <option value="Low" <%= filters.priority === 'Low' ? 'selected' : '' %>>Low</option>
+          <option value="Medium" <%= filters.priority === 'Medium' ? 'selected' : '' %>>Medium</option>
+          <option value="High" <%= filters.priority === 'High' ? 'selected' : '' %>>High</option>
+        </select>
       </div>
-
-      <div class="task-actions">
-        <form action="/dashboard/<%= task._id %>/toggle?_method=PATCH" method="POST">
-          <button class="btn btn-small" type="submit"><%= task.status === 'Pending' ? 'Mark Completed' : 'Mark Pending' %></button>
-        </form>
-        <a class="btn btn-ghost btn-small" href="/dashboard/<%= task._id %>/edit">Edit</a>
-        <form action="/dashboard/<%= task._id %>?_method=DELETE" method="POST">
-          <button class="btn btn-danger btn-small" type="submit">Delete</button>
-        </form>
+      <div class="filter-btns">
+        <button class="btn btn-small" type="submit">Apply</button>
+        <a href="/dashboard" class="btn btn-ghost btn-small">Reset</a>
       </div>
-    </article>
-  <% }) %>
+    </form>
+  </article>
+
+  <article class="dashboard-panel tasks-panel">
+    <div class="tasks-head">
+      <h3>Task Pipeline</h3>
+      <span><%= tasks.length %> showing</span>
+    </div>
+
+    <section class="task-grid modern-task-grid redesigned-task-grid">
+      <% if (!tasks.length) { %>
+        <p class="empty-state">No tasks found. Create your first task to start analytics.</p>
+      <% } %>
+
+      <% tasks.forEach((task) => { %>
+        <% const isOverdue = task.deadline && task.status === 'Pending' && new Date(task.deadline) < new Date(); %>
+        <article class="task-card modern-task-card redesigned-task-card <%= isOverdue ? 'overdue' : '' %>">
+          <div class="task-card-top">
+            <h3><%= task.title %></h3>
+            <span class="badge <%= task.priority.toLowerCase() %>"><%= task.priority %></span>
+          </div>
+
+          <p class="task-desc"><%= task.description || 'No description provided.' %></p>
+
+          <div class="task-meta-grid">
+            <div><small>Status</small><strong><%= task.status %></strong></div>
+            <div><small>Deadline</small><strong><%= task.deadline ? new Date(task.deadline).toLocaleDateString() : 'N/A' %></strong></div>
+          </div>
+
+          <div class="task-actions">
+            <form action="/dashboard/<%= task._id %>/toggle?_method=PATCH" method="POST">
+              <button class="btn btn-small" type="submit"><%= task.status === 'Pending' ? 'Mark Completed' : 'Mark Pending' %></button>
+            </form>
+            <a class="btn btn-ghost btn-small" href="/dashboard/<%= task._id %>/edit">Edit</a>
+            <form action="/dashboard/<%= task._id %>?_method=DELETE" method="POST">
+              <button class="btn btn-danger btn-small" type="submit">Delete</button>
+            </form>
+          </div>
+        </article>
+      <% }) %>
+    </section>
+  </article>
 </section>
 
 <script>

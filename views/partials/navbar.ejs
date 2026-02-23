@@ -12,6 +12,14 @@
         <span class="menu-icon">📊</span>
         <span>Overview</span>
       </a>
+      <a href="/dashboard/profile" class="menu-item">
+        <span class="menu-icon">👤</span>
+        <span>View Profile</span>
+      </a>
+      <a href="/dashboard/profile/edit" class="menu-item">
+        <span class="menu-icon">✏️</span>
+        <span>Edit Profile</span>
+      </a>
       <a href="/dashboard?status=Pending" class="menu-item">
         <span class="menu-icon">🕒</span>
         <span>Pending Tasks</span>
@@ -19,10 +27,6 @@
       <a href="/dashboard?status=Completed" class="menu-item">
         <span class="menu-icon">✅</span>
         <span>Completed Tasks</span>
-      </a>
-      <a href="/dashboard?priority=High" class="menu-item">
-        <span class="menu-icon">🔥</span>
-        <span>High Priority</span>
       </a>
     </nav>
 
@@ -53,7 +57,8 @@
             <span>▾</span>
           </button>
           <div class="profile-menu" id="profileMenu">
-            <a href="/dashboard">My Dashboard</a>
+            <a href="/dashboard/profile">View Profile</a>
+            <a href="/dashboard/profile/edit">Edit Profile</a>
             <form action="/logout" method="POST">
               <button class="profile-logout" type="submit">Logout</button>
             </form>

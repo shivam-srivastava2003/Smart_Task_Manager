@@ -28,6 +28,12 @@ router
   .get(catchAsync(users.renderResetPassword))
   .post(validateResetPassword, catchAsync(users.resetPassword));
 
+router.get('/dashboard/profile', isLoggedIn, catchAsync(users.renderProfile));
+router
+  .route('/dashboard/profile/edit')
+  .get(isLoggedIn, catchAsync(users.renderEditProfile))
+  .post(isLoggedIn, catchAsync(users.updateProfile));
+
 router.post('/logout', isLoggedIn, users.logout);
 
 module.exports = router;
