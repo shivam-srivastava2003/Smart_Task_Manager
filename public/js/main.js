@@ -6,6 +6,36 @@ document.querySelectorAll('.flash').forEach((flash) => {
   }, 3000);
 });
 
+const THEME_KEY = 'smart-theme';
+
+const getTheme = () => document.documentElement.getAttribute('data-theme') || 'light';
+
+const applyTheme = (theme) => {
+  document.documentElement.setAttribute('data-theme', theme);
+  try {
+    localStorage.setItem(THEME_KEY, theme);
+  } catch (e) {
+    // Ignore storage errors safely.
+  }
+
+  const icon = theme === 'dark' ? '☀️' : '🌙';
+  document.querySelectorAll('#themeToggle, #themeTogglePublic').forEach((btn) => {
+    btn.textContent = icon;
+    btn.setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+  });
+};
+
+const toggleTheme = () => {
+  const nextTheme = getTheme() === 'dark' ? 'light' : 'dark';
+  applyTheme(nextTheme);
+};
+
+applyTheme(getTheme());
+
+document.querySelectorAll('#themeToggle, #themeTogglePublic').forEach((btn) => {
+  btn.addEventListener('click', toggleTheme);
+});
+
 // Sidebar toggle for mobile.
 const menuToggle = document.getElementById('menuToggle');
 const sidebarNav = document.getElementById('sidebarNav');
