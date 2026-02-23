@@ -394,3 +394,54 @@ html[data-theme='dark'] .btn-ghost { background: #1f2937; color: #e5e7eb; }
 .sidebar-logout {
   transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
 }
+
+
+/* SaaS dashboard enhancements */
+.saas-header h1 { margin: .2rem 0 .3rem; }
+.saas-stats { grid-template-columns: repeat(4, 1fr); }
+.saas-stats .stat-card small { color: var(--muted); font-size: .8rem; }
+.warning-card {
+  border: 1px solid rgba(239, 68, 68, .35);
+  background: linear-gradient(180deg, rgba(239,68,68,.08), var(--surface));
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.chart-card {
+  background: var(--surface);
+  border-radius: .85rem;
+  padding: 1rem;
+  border: 1px solid #eef2f7;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, .05);
+  min-height: 320px;
+}
+
+.chart-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .8rem;
+  margin-bottom: .6rem;
+}
+
+.chart-head h3 { margin: 0; }
+.chart-head span { color: var(--muted); font-size: .85rem; }
+.chart-card canvas { width: 100% !important; height: 240px !important; }
+
+html[data-theme='dark'] .warning-card {
+  background: linear-gradient(180deg, rgba(239,68,68,.14), var(--surface));
+}
+
+@media (max-width: 1024px) {
+  .saas-stats { grid-template-columns: repeat(2, 1fr); }
+  .analytics-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .saas-stats { grid-template-columns: 1fr; }
+}

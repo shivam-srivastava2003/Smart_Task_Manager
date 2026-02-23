@@ -13,14 +13,49 @@ module.exports.index = async (req, res) => {
   }
 
   const tasks = await Task.find(query).sort({ deadline: 1, createdAt: -1 });
-  const totalTasks = await Task.countDocuments({ owner: req.user._id });
-  const completedTasks = await Task.countDocuments({ owner: req.user._id, status: 'Completed' });
-  const pendingTasks = await Task.countDocuments({ owner: req.user._id, status: 'Pending' });
+  const allTasks = await Task.find({ owner: req.user._id }).sort({ createdAt: 1 });
+
+  const totalTasks = allTasks.length;
+  const completedTasks = allTasks.filter((task) => task.status === 'Completed').length;
+  const pendingTasks = allTasks.filter((task) => task.status === 'Pending').length;
+
+  const priorityData = {
+    Low: allTasks.filter((task) => task.priority === 'Low').length,
+    Medium: allTasks.filter((task) => task.priority === 'Medium').length,
+    High: allTasks.filter((task) => task.priority === 'High').length
+  };
+
+  const overdueTasks = allTasks.filter((task) => task.deadline && task.status === 'Pending' && new Date(task.deadline) < new Date()).length;
+
+  const recentTaskTrendMap = {};
+  for (let i = 6; i >= 0; i -= 1) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    const key = date.toISOString().slice(0, 10);
+    recentTaskTrendMap[key] = 0;
+  }
+
+  allTasks.forEach((task) => {
+    const key = new Date(task.createdAt).toISOString().slice(0, 10);
+    if (Object.prototype.hasOwnProperty.call(recentTaskTrendMap, key)) {
+      recentTaskTrendMap[key] += 1;
+    }
+  });
+
+  const analytics = {
+    priorityLabels: Object.keys(priorityData),
+    priorityValues: Object.values(priorityData),
+    trendLabels: Object.keys(recentTaskTrendMap),
+    trendValues: Object.values(recentTaskTrendMap),
+    completionRate: totalTasks ? Math.round((completedTasks / totalTasks) * 100) : 0,
+    overdueTasks
+  };
 
   res.render('tasks/index', {
     tasks,
     filters: { status: status || 'All', priority: priority || 'All' },
-    stats: { totalTasks, completedTasks, pendingTasks }
+    stats: { totalTasks, completedTasks, pendingTasks },
+    analytics
   });
 };
 

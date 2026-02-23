@@ -1,26 +1,52 @@
 <% layout('layouts/boilerplate') %>
 
-<section class="dashboard-header modern-header">
+<section class="dashboard-header modern-header saas-header">
   <div>
-    <p class="section-kicker">Overview</p>
-    <h1>Task Dashboard</h1>
-    <p class="section-sub">Track progress, deadlines, and priorities in one place.</p>
+    <p class="section-kicker">SaaS Overview</p>
+    <h1>Smart Task Intelligence Hub</h1>
+    <p class="section-sub">Manage workflow, monitor productivity, and track progress with real-time analytics.</p>
   </div>
-  <a href="/dashboard/new" class="btn">+ Add Task</a>
+  <a href="/dashboard/new" class="btn">+ Create Task</a>
 </section>
 
-<section class="stats-grid modern-stats">
+<section class="stats-grid modern-stats saas-stats">
   <article class="stat-card">
     <p>Total Tasks</p>
     <h3><%= stats.totalTasks %></h3>
+    <small>All time workload</small>
   </article>
   <article class="stat-card">
     <p>Completed</p>
     <h3><%= stats.completedTasks %></h3>
+    <small><%= analytics.completionRate %>% completion rate</small>
   </article>
   <article class="stat-card">
     <p>Pending</p>
     <h3><%= stats.pendingTasks %></h3>
+    <small>Requires action</small>
+  </article>
+  <article class="stat-card warning-card">
+    <p>Overdue</p>
+    <h3><%= analytics.overdueTasks %></h3>
+    <small>Critical follow-up</small>
+  </article>
+</section>
+
+<section class="analytics-grid">
+  <article class="chart-card">
+    <div class="chart-head">
+      <h3>Priority Distribution</h3>
+      <span>By task priority</span>
+    </div>
+    <canvas id="priorityChart" height="180"></canvas>
+  </article>
+
+  <article class="chart-card">
+    <div class="chart-head">
+      <h3>7-Day Task Trend</h3>
+      <span>Tasks created per day</span>
+    </div>
+    <canvas id="trendChart" height="180"></canvas>
   </article>
 </section>
 
@@ -44,7 +70,7 @@
 
 <section class="task-grid modern-task-grid">
   <% if (!tasks.length) { %>
-    <p class="empty-state">No tasks found. Create your first task!</p>
+    <p class="empty-state">No tasks found. Create your first task to start analytics.</p>
   <% } %>
 
   <% tasks.forEach((task) => { %>
@@ -74,3 +100,7 @@
     </article>
   <% }) %>
 </section>
+
+<script>
+  window.dashboardAnalytics = <%- JSON.stringify(analytics) %>;
+</script>

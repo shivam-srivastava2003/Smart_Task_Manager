@@ -7,7 +7,6 @@ document.querySelectorAll('.flash').forEach((flash) => {
 });
 
 const THEME_KEY = 'smart-theme';
-
 const getTheme = () => document.documentElement.getAttribute('data-theme') || 'light';
 
 const applyTheme = (theme) => {
@@ -63,7 +62,6 @@ if (profileBtn && profileMenu) {
   });
 }
 
-
 const setupPageTransitions = () => {
   const links = document.querySelectorAll("a[href^='/']");
   links.forEach((link) => {
@@ -76,4 +74,81 @@ const setupPageTransitions = () => {
   });
 };
 
+const initDashboardCharts = () => {
+  if (typeof Chart === 'undefined' || !window.dashboardAnalytics) return;
+
+  const priorityCanvas = document.getElementById('priorityChart');
+  const trendCanvas = document.getElementById('trendChart');
+  if (!priorityCanvas || !trendCanvas) return;
+
+  const isDark = getTheme() === 'dark';
+  const labelColor = isDark ? '#d1d5db' : '#374151';
+  const gridColor = isDark ? '#334155' : '#e5e7eb';
+
+  const { priorityLabels, priorityValues, trendLabels, trendValues } = window.dashboardAnalytics;
+
+  new Chart(priorityCanvas, {
+    type: 'doughnut',
+    data: {
+      labels: priorityLabels,
+      datasets: [
+        {
+          data: priorityValues,
+          backgroundColor: ['#22c55e', '#facc15', '#ef4444'],
+          borderWidth: 0,
+          hoverOffset: 8
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          labels: { color: labelColor }
+        }
+      }
+    }
+  });
+
+  new Chart(trendCanvas, {
+    type: 'line',
+    data: {
+      labels: trendLabels,
+      datasets: [
+        {
+          label: 'Tasks Created',
+          data: trendValues,
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37, 99, 235, 0.14)',
+          fill: true,
+          tension: 0.35,
+          pointRadius: 3
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          ticks: { color: labelColor },
+          grid: { color: gridColor }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: { color: labelColor, precision: 0 },
+          grid: { color: gridColor }
+        }
+      },
+      plugins: {
+        legend: {
+          labels: { color: labelColor }
+        }
+      }
+    }
+  });
+};
+
 setupPageTransitions();
+initDashboardCharts();
