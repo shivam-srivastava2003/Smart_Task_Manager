@@ -445,3 +445,81 @@ html[data-theme='dark'] .warning-card {
 @media (max-width: 768px) {
   .saas-stats { grid-template-columns: 1fr; }
 }
+
+/* Redesigned top + left navigation */
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.45);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 180ms ease;
+  z-index: 995;
+}
+
+.brand-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #60a5fa;
+  display: inline-block;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.02rem;
+  padding: .7rem .55rem;
+  border-bottom: 1px solid rgba(148, 163, 184, .2);
+  margin-bottom: .55rem;
+}
+
+.sidebar { border-right: 1px solid rgba(148, 163, 184, .18); }
+.menu-item {
+  border: 1px solid transparent;
+  border-radius: .7rem;
+}
+.menu-item:hover {
+  border-color: rgba(96,165,250,.25);
+  background: rgba(30, 41, 59, .9);
+}
+
+.dashboard-topbar {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(8px);
+}
+.topbar-left,
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+}
+.topbar-title-wrap { line-height: 1.15; }
+.topbar-kicker {
+  margin: 0;
+  font-size: .72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.topbar-title { font-weight: 700; letter-spacing: .2px; }
+
+html[data-theme='dark'] .dashboard-topbar {
+  background: rgba(15, 23, 42, 0.88);
+}
+
+@media (max-width: 900px) {
+  .sidebar.open + .dashboard-content-area .dashboard-topbar,
+  .sidebar.open ~ .dashboard-content-area .dashboard-topbar {
+    z-index: 996;
+  }
+
+  .sidebar.open ~ .sidebar-backdrop,
+  .sidebar-backdrop.show {
+    opacity: 1;
+    visibility: visible;
+  }
+}

@@ -35,14 +35,36 @@ document.querySelectorAll('#themeToggle, #themeTogglePublic').forEach((btn) => {
   btn.addEventListener('click', toggleTheme);
 });
 
-// Sidebar toggle for mobile.
+// Sidebar toggle + outside click close.
 const menuToggle = document.getElementById('menuToggle');
 const sidebarNav = document.getElementById('sidebarNav');
+const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+const closeSidebar = () => {
+  if (!sidebarNav) return;
+  sidebarNav.classList.remove('open');
+  if (sidebarBackdrop) sidebarBackdrop.classList.remove('show');
+};
+
 if (menuToggle && sidebarNav) {
   menuToggle.addEventListener('click', () => {
-    sidebarNav.classList.toggle('open');
+    const isOpen = sidebarNav.classList.toggle('open');
+    if (sidebarBackdrop) sidebarBackdrop.classList.toggle('show', isOpen);
   });
 }
+
+if (sidebarBackdrop) {
+  sidebarBackdrop.addEventListener('click', closeSidebar);
+}
+
+document.addEventListener('click', (e) => {
+  if (!sidebarNav || !sidebarNav.classList.contains('open')) return;
+  const insideSidebar = e.target.closest('#sidebarNav');
+  const toggleBtn = e.target.closest('#menuToggle');
+  if (!insideSidebar && !toggleBtn) {
+    closeSidebar();
+  }
+});
 
 // Profile dropdown interaction.
 const profileBtn = document.getElementById('profileBtn');
