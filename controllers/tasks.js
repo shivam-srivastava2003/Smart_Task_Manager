@@ -1,7 +1,7 @@
 const Task = require('../models/task');
 
 module.exports.index = async (req, res) => {
-  const { status, priority } = req.query;
+  const { status, priority, category } = req.query;
   const query = { owner: req.user._id };
 
   if (status && ['Pending', 'Completed'].includes(status)) {
@@ -10,6 +10,10 @@ module.exports.index = async (req, res) => {
 
   if (priority && ['Low', 'Medium', 'High'].includes(priority)) {
     query.priority = priority;
+  }
+
+  if (category && ['Personal', 'Professional', 'Student'].includes(category)) {
+    query.category = category;
   }
 
   const tasks = await Task.find(query).sort({ deadline: 1, createdAt: -1 });
@@ -53,7 +57,7 @@ module.exports.index = async (req, res) => {
 
   res.render('tasks/index', {
     tasks,
-    filters: { status: status || 'All', priority: priority || 'All' },
+    filters: { status: status || 'All', priority: priority || 'All', category: category || 'All' },
     stats: { totalTasks, completedTasks, pendingTasks },
     analytics
   });

@@ -54,6 +54,16 @@
         </select>
       </div>
       <div class="field-wrap">
+        <label>Category</label>
+        <select name="category">
+          <option value="">All Categories</option>
+          <option value="Personal" <%= filters.category === 'Personal' ? 'selected' : '' %>>Personal</option>
+          <option value="Professional" <%= filters.category === 'Professional' ? 'selected' : '' %>>Professional</option>
+          <option value="Student" <%= filters.category === 'Student' ? 'selected' : '' %>>Student</option>
+        </select>
+      </div>
+
+      <div class="field-wrap">
         <label>Priority</label>
         <select name="priority">
           <option value="">All Priorities</option>
@@ -91,6 +101,7 @@
           <p class="task-desc"><%= task.description || 'No description provided.' %></p>
 
           <div class="task-meta-grid">
+            <div><small>Category</small><strong><%= task.category || 'Personal' %></strong></div>
             <div><small>Status</small><strong><%= task.status %></strong></div>
             <div><small>Deadline</small><strong><%= task.deadline ? new Date(task.deadline).toLocaleDateString() : 'N/A' %></strong></div>
           </div>

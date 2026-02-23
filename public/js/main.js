@@ -172,5 +172,37 @@ const initDashboardCharts = () => {
   });
 };
 
+const initOtpResendTimer = () => {
+  const timerBlock = document.querySelector('.otp-timer-block');
+  const resendForm = document.getElementById('resendOtpForm');
+  const countdownText = document.getElementById('otpCountdownText');
+  if (!timerBlock || !resendForm || !countdownText) return;
+
+  let remaining = Number(timerBlock.dataset.otpSeconds || 0);
+
+  const updateUI = () => {
+    if (remaining > 0) {
+      const min = String(Math.floor(remaining / 60)).padStart(2, '0');
+      const sec = String(remaining % 60).padStart(2, '0');
+      countdownText.textContent = `Resend available in ${min}:${sec}`;
+      resendForm.style.display = 'none';
+    } else {
+      countdownText.textContent = 'You can now resend OTP.';
+      resendForm.style.display = 'flex';
+    }
+  };
+
+  updateUI();
+  if (remaining <= 0) return;
+
+  const interval = setInterval(() => {
+    remaining -= 1;
+    updateUI();
+    if (remaining <= 0) clearInterval(interval);
+  }, 1000);
+};
+
+
 setupPageTransitions();
 initDashboardCharts();
+initOtpResendTimer();

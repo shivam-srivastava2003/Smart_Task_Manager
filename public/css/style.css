@@ -549,7 +549,7 @@ html[data-theme='dark'] .dashboard-topbar {
 
 .redesign-filter-form {
   display: grid;
-  grid-template-columns: 1fr 1fr auto;
+  grid-template-columns: 1fr 1fr 1fr auto;
   gap: .8rem;
   align-items: end;
 }
@@ -647,3 +647,22 @@ html[data-theme='dark'] .task-meta-grid div {
 }
 .profile-line:last-child { border-bottom: none; }
 .profile-line span { color: var(--muted); }
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+}
+.brand-logo img,
+.nav-logo {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+}
+.nav-logo {
+  width: 20px;
+  height: 20px;
+}
+
+.otp-wrapper .otp-timer-block { margin-top: .8rem; }
+.otp-wrapper .inline-form { justify-content: flex-start; }

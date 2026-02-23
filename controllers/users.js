@@ -54,7 +54,13 @@ module.exports.renderVerifyOtp = async (req, res) => {
     req.flash('error', 'Please signup first to verify your email.');
     return res.redirect('/signup');
   }
-  return res.render('auth/verify-otp');
+
+  const user = await User.findById(req.session.pendingVerificationUserId);
+  const remainingSeconds = user?.otpExpiresAt
+    ? Math.max(0, Math.floor((new Date(user.otpExpiresAt).getTime() - Date.now()) / 1000))
+    : 0;
+
+  return res.render('auth/verify-otp', { remainingSeconds });
 };
 
 module.exports.verifyOtp = async (req, res) => {

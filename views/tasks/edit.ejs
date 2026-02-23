@@ -8,6 +8,14 @@
     <label for="description">Description</label>
     <textarea id="description" name="task[description]"><%= task.description %></textarea>
 
+
+    <label for="category">Category</label>
+    <select id="category" name="task[category]">
+      <option value="Personal" <%= task.category === 'Personal' ? 'selected' : '' %>>Personal</option>
+      <option value="Professional" <%= task.category === 'Professional' ? 'selected' : '' %>>Professional</option>
+      <option value="Student" <%= task.category === 'Student' ? 'selected' : '' %>>Student</option>
+    </select>
+
     <label for="priority">Priority</label>
     <select id="priority" name="task[priority]">
       <option value="Low" <%= task.priority === 'Low' ? 'selected' : '' %>>Low</option>

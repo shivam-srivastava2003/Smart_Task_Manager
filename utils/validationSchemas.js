@@ -6,6 +6,7 @@ const taskSchema = Joi.object({
       'string.empty': 'Task title is required'
     }),
     description: Joi.string().allow(''),
+    category: Joi.string().valid('Personal', 'Professional', 'Student').required(),
     priority: Joi.string().valid('Low', 'Medium', 'High').required(),
     deadline: Joi.date().allow('', null),
     status: Joi.string().valid('Pending', 'Completed').required()

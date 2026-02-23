@@ -12,6 +12,11 @@ const taskSchema = new mongoose.Schema(
       trim: true,
       default: ''
     },
+    category: {
+      type: String,
+      enum: ['Personal', 'Professional', 'Student'],
+      default: 'Personal'
+    },
     priority: {
       type: String,
       enum: ['Low', 'Medium', 'High'],

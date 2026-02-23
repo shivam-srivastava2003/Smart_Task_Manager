@@ -1,5 +1,5 @@
 <% layout('layouts/boilerplate') %>
-<section class="auth-container">
+<section class="auth-container otp-wrapper">
   <h1>Verify Email OTP</h1>
   <p class="muted">Enter the 6-digit OTP sent to your email. OTP expires in 10 minutes.</p>
 
@@ -9,7 +9,10 @@
     <button class="btn" type="submit">Verify OTP</button>
   </form>
 
-  <form action="/verify-otp/resend" method="POST" class="inline-form">
-    <button class="btn btn-ghost" type="submit">Resend OTP</button>
-  </form>
+  <div class="otp-timer-block" data-otp-seconds="<%= typeof remainingSeconds === 'number' ? remainingSeconds : 0 %>">
+    <p class="muted" id="otpCountdownText">Resend available in --:--</p>
+    <form action="/verify-otp/resend" method="POST" class="inline-form" id="resendOtpForm">
+      <button class="btn btn-ghost" type="submit">Resend OTP</button>
+    </form>
+  </div>
 </section>
