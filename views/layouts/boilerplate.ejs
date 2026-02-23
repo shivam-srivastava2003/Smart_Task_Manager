@@ -7,15 +7,22 @@
     <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body>
-    <div class="app-shell">
-      <% if (currentUser) { %>
-        <%- include('../partials/navbar') %>
-      <% } %>
-      <main class="main-content">
+    <% if (currentUser) { %>
+      <%- include('../partials/navbar') %>
+      <main class="main-content authenticated-main">
         <%- include('../partials/flash') %>
         <%- body %>
       </main>
+      </div>
     </div>
+    <% } else { %>
+      <div class="app-shell">
+        <main class="main-content">
+          <%- include('../partials/flash') %>
+          <%- body %>
+        </main>
+      </div>
+    <% } %>
     <script src="/js/main.js"></script>
   </body>
 </html>

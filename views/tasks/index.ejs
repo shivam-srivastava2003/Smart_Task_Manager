@@ -1,16 +1,30 @@
 <% layout('layouts/boilerplate') %>
-<section class="dashboard-header">
-  <h1>Task Dashboard</h1>
+
+<section class="dashboard-header modern-header">
+  <div>
+    <p class="section-kicker">Overview</p>
+    <h1>Task Dashboard</h1>
+    <p class="section-sub">Track progress, deadlines, and priorities in one place.</p>
+  </div>
   <a href="/tasks/new" class="btn">+ Add Task</a>
 </section>
 
-<section class="stats-grid">
-  <article class="stat-card"><h3>Total</h3><p><%= stats.totalTasks %></p></article>
-  <article class="stat-card"><h3>Completed</h3><p><%= stats.completedTasks %></p></article>
-  <article class="stat-card"><h3>Pending</h3><p><%= stats.pendingTasks %></p></article>
+<section class="stats-grid modern-stats">
+  <article class="stat-card">
+    <p>Total Tasks</p>
+    <h3><%= stats.totalTasks %></h3>
+  </article>
+  <article class="stat-card">
+    <p>Completed</p>
+    <h3><%= stats.completedTasks %></h3>
+  </article>
+  <article class="stat-card">
+    <p>Pending</p>
+    <h3><%= stats.pendingTasks %></h3>
+  </article>
 </section>
 
-<section class="filter-bar">
+<section class="filter-panel">
   <form action="/tasks" method="GET" class="filter-form">
     <select name="status">
       <option value="">All Statuses</option>
@@ -23,28 +37,31 @@
       <option value="Medium" <%= filters.priority === 'Medium' ? 'selected' : '' %>>Medium</option>
       <option value="High" <%= filters.priority === 'High' ? 'selected' : '' %>>High</option>
     </select>
-    <button class="btn btn-small" type="submit">Apply Filters</button>
+    <button class="btn btn-small" type="submit">Apply</button>
     <a href="/tasks" class="btn btn-ghost btn-small">Reset</a>
   </form>
 </section>
 
-<section class="task-grid">
+<section class="task-grid modern-task-grid">
   <% if (!tasks.length) { %>
     <p class="empty-state">No tasks found. Create your first task!</p>
   <% } %>
 
   <% tasks.forEach((task) => { %>
     <% const isOverdue = task.deadline && task.status === 'Pending' && new Date(task.deadline) < new Date(); %>
-    <article class="task-card <%= isOverdue ? 'overdue' : '' %>">
+    <article class="task-card modern-task-card <%= isOverdue ? 'overdue' : '' %>">
       <div class="task-top">
         <h3><%= task.title %></h3>
         <span class="badge <%= task.priority.toLowerCase() %>"><%= task.priority %></span>
       </div>
-      <p><%= task.description || 'No description provided.' %></p>
-      <div class="task-meta">
-        <span>Status: <strong><%= task.status %></strong></span>
-        <span>Deadline: <strong><%= task.deadline ? new Date(task.deadline).toLocaleDateString() : 'N/A' %></strong></span>
+
+      <p class="task-desc"><%= task.description || 'No description provided.' %></p>
+
+      <div class="task-meta-row">
+        <span class="pill">Status: <strong><%= task.status %></strong></span>
+        <span class="pill">Due: <strong><%= task.deadline ? new Date(task.deadline).toLocaleDateString() : 'N/A' %></strong></span>
       </div>
+
       <div class="task-actions">
         <form action="/tasks/<%= task._id %>/toggle?_method=PATCH" method="POST">
           <button class="btn btn-small" type="submit"><%= task.status === 'Pending' ? 'Mark Completed' : 'Mark Pending' %></button>
