@@ -100,3 +100,18 @@ Smart_Task_Manager/
 - Priority color coding (Low/Medium/High)
 - Overdue task highlighting
 - MVC architecture with centralized error handling
+
+
+## Email Configuration (OTP + Reset Emails)
+
+Set these environment variables to send OTP and reset emails directly:
+
+```bash
+export SMTP_HOST=smtp.example.com
+export SMTP_PORT=587
+export SMTP_USER=your-email@example.com
+export SMTP_PASS=your-email-password
+export MAIL_FROM="Smart Task Manager <no-reply@example.com>"
+```
+
+If SMTP env vars are missing, app falls back to console logging for email content.

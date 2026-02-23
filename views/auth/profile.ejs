@@ -4,6 +4,11 @@
   <article class="profile-card">
     <div class="profile-line"><span>Username</span><strong><%= user.username %></strong></div>
     <div class="profile-line"><span>Email</span><strong><%= user.email %></strong></div>
+    <div class="profile-line"><span>Full Name</span><strong><%= user.fullName || '—' %></strong></div>
+    <div class="profile-line"><span>Phone</span><strong><%= user.phone || '—' %></strong></div>
+    <div class="profile-line"><span>Role</span><strong><%= user.role || '—' %></strong></div>
+    <div class="profile-line"><span>Location</span><strong><%= user.location || '—' %></strong></div>
+    <div class="profile-line"><span>Bio</span><strong><%= user.bio || '—' %></strong></div>
     <div class="profile-line"><span>Verified</span><strong><%= user.isVerified ? 'Yes' : 'No' %></strong></div>
   </article>
   <a href="/dashboard/profile/edit" class="btn">Edit Profile</a>

@@ -8,6 +8,21 @@
     <label for="email">Email</label>
     <input id="email" type="email" name="email" value="<%= user.email %>" required />
 
+    <label for="fullName">Full Name</label>
+    <input id="fullName" type="text" name="fullName" value="<%= user.fullName || '' %>" />
+
+    <label for="phone">Phone</label>
+    <input id="phone" type="text" name="phone" value="<%= user.phone || '' %>" />
+
+    <label for="role">Role / Profession</label>
+    <input id="role" type="text" name="role" value="<%= user.role || '' %>" />
+
+    <label for="location">Location</label>
+    <input id="location" type="text" name="location" value="<%= user.location || '' %>" />
+
+    <label for="bio">Bio</label>
+    <textarea id="bio" name="bio"><%= user.bio || '' %></textarea>
+
     <button class="btn" type="submit">Save Changes</button>
   </form>
 </section>

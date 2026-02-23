@@ -1,12 +1,21 @@
 const crypto = require('crypto');
 const passport = require('passport');
 const User = require('../models/user');
+const { sendEmail } = require('../utils/mailer');
 
 const OTP_EXPIRY_MINUTES = 10;
 const RESET_TOKEN_EXPIRY_MINUTES = 10;
 
 const generateOtp = () => `${Math.floor(100000 + Math.random() * 900000)}`;
 const hashValue = (value) => crypto.createHash('sha256').update(value).digest('hex');
+
+const sendOtpEmail = async (email, otp) => {
+  await sendEmail({
+    to: email,
+    subject: 'Your Smart Task Manager OTP',
+    html: `<h2>Email Verification OTP</h2><p>Your OTP is <strong>${otp}</strong>.</p><p>It expires in ${OTP_EXPIRY_MINUTES} minutes.</p>`
+  });
+};
 
 module.exports.renderSignup = (req, res) => {
   res.render('auth/signup');
@@ -27,10 +36,16 @@ module.exports.signup = async (req, res) => {
   const user = new User({ username, email, isVerified: false, otpHash, otpExpiresAt });
   const registeredUser = await User.register(user, password);
 
-  req.session.pendingVerificationUserId = registeredUser._id.toString();
+  try {
+    await sendOtpEmail(registeredUser.email, otp);
+  } catch (err) {
+    await User.findByIdAndDelete(registeredUser._id);
+    req.flash('error', 'Unable to send OTP email. Please try signup again.');
+    return res.redirect('/signup');
+  }
 
-  console.log(`[DEV OTP] ${registeredUser.email}: ${otp}`);
-  req.flash('success', `Account created. OTP sent to ${registeredUser.email}. (Dev OTP logged in server console)`);
+  req.session.pendingVerificationUserId = registeredUser._id.toString();
+  req.flash('success', `Account created. OTP sent to ${registeredUser.email}.`);
   return res.redirect('/verify-otp');
 };
 
@@ -95,8 +110,13 @@ module.exports.resendOtp = async (req, res) => {
   user.otpExpiresAt = new Date(Date.now() + OTP_EXPIRY_MINUTES * 60 * 1000);
   await user.save();
 
-  console.log(`[DEV OTP RESEND] ${user.email}: ${otp}`);
-  req.flash('success', 'A new OTP has been sent to your email. (Dev OTP logged in server console)');
+  try {
+    await sendOtpEmail(user.email, otp);
+    req.flash('success', 'A new OTP has been sent to your email.');
+  } catch (err) {
+    req.flash('error', 'Unable to resend OTP email. Please try again.');
+  }
+
   return res.redirect('/verify-otp');
 };
 
@@ -144,8 +164,17 @@ module.exports.sendResetToken = async (req, res) => {
     await user.save();
 
     const resetUrl = `${req.protocol}://${req.get('host')}/reset-password/${resetToken}`;
-    console.log(`[DEV RESET LINK] ${user.email}: ${resetUrl}`);
-    req.flash('success', 'Password reset link sent to your email. (Dev link logged in server console)');
+
+    try {
+      await sendEmail({
+        to: user.email,
+        subject: 'Reset your Smart Task Manager password',
+        html: `<h2>Password Reset</h2><p>Click this link to reset password:</p><p><a href="${resetUrl}">${resetUrl}</a></p><p>Link expires in ${RESET_TOKEN_EXPIRY_MINUTES} minutes.</p>`
+      });
+      req.flash('success', 'Password reset link sent to your email.');
+    } catch (err) {
+      req.flash('error', 'Unable to send reset email right now. Please try again.');
+    }
   } else {
     req.flash('success', 'If an account with that email exists, a reset link has been sent.');
   }
@@ -189,7 +218,6 @@ module.exports.resetPassword = async (req, res) => {
   return res.redirect('/login');
 };
 
-
 module.exports.renderProfile = async (req, res) => {
   const user = await User.findById(req.user._id);
   res.render('auth/profile', { user });
@@ -201,7 +229,16 @@ module.exports.renderEditProfile = async (req, res) => {
 };
 
 module.exports.updateProfile = async (req, res) => {
-  const { username, email } = req.body;
+  const {
+    username,
+    email,
+    fullName,
+    phone,
+    role,
+    location,
+    bio
+  } = req.body;
+
   const existingUser = await User.findOne({
     _id: { $ne: req.user._id },
     $or: [{ username }, { email }]
@@ -212,7 +249,16 @@ module.exports.updateProfile = async (req, res) => {
     return res.redirect('/dashboard/profile/edit');
   }
 
-  await User.findByIdAndUpdate(req.user._id, { username, email });
+  await User.findByIdAndUpdate(req.user._id, {
+    username,
+    email,
+    fullName,
+    phone,
+    role,
+    location,
+    bio
+  });
+
   req.flash('success', 'Profile updated successfully.');
   return res.redirect('/dashboard/profile');
 };
