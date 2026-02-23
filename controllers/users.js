@@ -122,7 +122,7 @@ module.exports.login = (req, res, next) => {
     return req.logIn(user, (loginErr) => {
       if (loginErr) return next(loginErr);
       req.flash('success', `Welcome back, ${user.username}!`);
-      const redirectUrl = res.locals.returnTo || '/tasks';
+      const redirectUrl = res.locals.returnTo || '/dashboard';
       delete req.session.returnTo;
       return res.redirect(redirectUrl);
     });

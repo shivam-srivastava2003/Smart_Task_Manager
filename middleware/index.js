@@ -37,7 +37,7 @@ module.exports.storeReturnTo = (req, res, next) => {
 };
 
 module.exports.validateTask = (req, res, next) => {
-  if (!validateWithFlash(taskSchema, req, res, req.originalUrl.includes('/edit') ? req.originalUrl : '/tasks/new')) return;
+  if (!validateWithFlash(taskSchema, req, res, req.originalUrl.includes('/edit') ? req.originalUrl : '/dashboard/new')) return;
   return next();
 };
 
@@ -74,7 +74,7 @@ module.exports.isTaskOwner = async (req, res, next) => {
   }
   if (!task.owner.equals(req.user._id)) {
     req.flash('error', 'You do not have permission to access this task.');
-    return res.redirect('/tasks');
+    return res.redirect('/dashboard');
   }
   res.locals.task = task;
   return next();

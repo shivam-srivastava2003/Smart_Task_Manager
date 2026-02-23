@@ -6,7 +6,7 @@
     <h1>Task Dashboard</h1>
     <p class="section-sub">Track progress, deadlines, and priorities in one place.</p>
   </div>
-  <a href="/tasks/new" class="btn">+ Add Task</a>
+  <a href="/dashboard/new" class="btn">+ Add Task</a>
 </section>
 
 <section class="stats-grid modern-stats">
@@ -25,7 +25,7 @@
 </section>
 
 <section class="filter-panel">
-  <form action="/tasks" method="GET" class="filter-form">
+  <form action="/dashboard" method="GET" class="filter-form">
     <select name="status">
       <option value="">All Statuses</option>
       <option value="Pending" <%= filters.status === 'Pending' ? 'selected' : '' %>>Pending</option>
@@ -38,7 +38,7 @@
       <option value="High" <%= filters.priority === 'High' ? 'selected' : '' %>>High</option>
     </select>
     <button class="btn btn-small" type="submit">Apply</button>
-    <a href="/tasks" class="btn btn-ghost btn-small">Reset</a>
+    <a href="/dashboard" class="btn btn-ghost btn-small">Reset</a>
   </form>
 </section>
 
@@ -63,11 +63,11 @@
       </div>
 
       <div class="task-actions">
-        <form action="/tasks/<%= task._id %>/toggle?_method=PATCH" method="POST">
+        <form action="/dashboard/<%= task._id %>/toggle?_method=PATCH" method="POST">
           <button class="btn btn-small" type="submit"><%= task.status === 'Pending' ? 'Mark Completed' : 'Mark Pending' %></button>
         </form>
-        <a class="btn btn-ghost btn-small" href="/tasks/<%= task._id %>/edit">Edit</a>
-        <form action="/tasks/<%= task._id %>?_method=DELETE" method="POST">
+        <a class="btn btn-ghost btn-small" href="/dashboard/<%= task._id %>/edit">Edit</a>
+        <form action="/dashboard/<%= task._id %>?_method=DELETE" method="POST">
           <button class="btn btn-danger btn-small" type="submit">Delete</button>
         </form>
       </div>

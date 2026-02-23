@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate') %>
 <section class="form-wrapper">
   <h1>Edit Task</h1>
-  <form action="/tasks/<%= task._id %>?_method=PUT" method="POST" class="form-card">
+  <form action="/dashboard/<%= task._id %>?_method=PUT" method="POST" class="form-card">
     <label for="title">Title *</label>
     <input id="title" type="text" name="task[title]" value="<%= task.title %>" required />
 

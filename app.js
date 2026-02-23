@@ -68,7 +68,8 @@ app.get('/', (req, res) => {
 });
 
 app.use('/', userRoutes);
-app.use('/tasks', taskRoutes);
+app.use('/dashboard', taskRoutes);
+app.use('/tasks', (req, res) => res.redirect(`/dashboard${req.url === '/' ? '' : req.url}`));
 
 app.all('*', (req, res, next) => {
   next(new ExpressError('Page Not Found', 404));

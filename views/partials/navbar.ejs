@@ -1,21 +1,21 @@
 <div class="dashboard-shell" id="dashboardShell">
   <aside class="sidebar" id="sidebarNav">
-    <a href="/tasks" class="sidebar-brand">⚡ Smart Task</a>
+    <a href="/dashboard" class="sidebar-brand">⚡ Smart Task</a>
 
     <nav class="sidebar-menu">
-      <a href="/tasks" class="menu-item">
+      <a href="/dashboard" class="menu-item">
         <span class="menu-icon">📊</span>
         <span>Dashboard</span>
       </a>
-      <a href="/tasks/new" class="menu-item">
+      <a href="/dashboard/new" class="menu-item">
         <span class="menu-icon">➕</span>
         <span>New Task</span>
       </a>
-      <a href="/tasks?status=Pending" class="menu-item">
+      <a href="/dashboard?status=Pending" class="menu-item">
         <span class="menu-icon">🕒</span>
         <span>Pending</span>
       </a>
-      <a href="/tasks?status=Completed" class="menu-item">
+      <a href="/dashboard?status=Completed" class="menu-item">
         <span class="menu-icon">✅</span>
         <span>Completed</span>
       </a>
@@ -42,8 +42,8 @@
           <span>▾</span>
         </button>
         <div class="profile-menu" id="profileMenu">
-          <a href="/tasks">My Dashboard</a>
-          <a href="/tasks/new">Create Task</a>
+          <a href="/dashboard">My Dashboard</a>
+          <a href="/dashboard/new">Create Task</a>
           <form action="/logout" method="POST">
             <button class="profile-logout" type="submit">Logout</button>
           </form>

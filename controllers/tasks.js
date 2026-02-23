@@ -33,7 +33,7 @@ module.exports.createTask = async (req, res) => {
   task.owner = req.user._id;
   await task.save();
   req.flash('success', 'Task created successfully.');
-  res.redirect('/tasks');
+  res.redirect('/dashboard');
 };
 
 module.exports.renderEditForm = async (req, res) => {
@@ -45,14 +45,14 @@ module.exports.updateTask = async (req, res) => {
   const { id } = req.params;
   await Task.findOneAndUpdate({ _id: id, owner: req.user._id }, req.body.task, { runValidators: true });
   req.flash('success', 'Task updated successfully.');
-  res.redirect('/tasks');
+  res.redirect('/dashboard');
 };
 
 module.exports.deleteTask = async (req, res) => {
   const { id } = req.params;
   await Task.findOneAndDelete({ _id: id, owner: req.user._id });
   req.flash('success', 'Task deleted successfully.');
-  res.redirect('/tasks');
+  res.redirect('/dashboard');
 };
 
 module.exports.toggleStatus = async (req, res) => {
@@ -61,5 +61,5 @@ module.exports.toggleStatus = async (req, res) => {
   task.status = task.status === 'Pending' ? 'Completed' : 'Pending';
   await task.save();
   req.flash('success', `Task marked as ${task.status}.`);
-  res.redirect('/tasks');
+  res.redirect('/dashboard');
 };
